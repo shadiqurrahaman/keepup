@@ -1,0 +1,93 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  PUMP_ADMIN
+  SUPER_ADMIN
+}
+
+enum VehicleType {
+  MOTORCYCLE
+  CAR
+  TRUCK
+  CNG
+  OTHER
+}
+
+model User {
+  id              String    @id @default(cuid())
+  phone           String    @unique
+  name            String?
+  nid             String?   @unique
+  nidVerified     Boolean   @default(false)
+  licensePlate    String?
+  licenseVerified Boolean   @default(false)
+  role            Role      @default(USER)
+  password        String
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  distributions   Distribution[] @relation("UserDistributions")
+  adminAt         PumpAdmin[]
+  givenDistributions Distribution[] @relation("AdminDistributions")
+  otpCodes        OtpCode[]
+}
+
+model Pump {
+  id            String    @id @default(cuid())
+  name          String
+  location      String
+  area          String
+  latitude      Float?
+  longitude     Float?
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  admins        PumpAdmin[]
+  distributions Distribution[]
+}
+
+model PumpAdmin {
+  id        String   @id @default(cuid())
+  userId    String
+  pumpId    String
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  pump      Pump     @relation(fields: [pumpId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, pumpId])
+}
+
+model Distribution {
+  id          String      @id @default(cuid())
+  userId      String
+  pumpId      String
+  adminId     String
+  amount      Float
+  vehicleType VehicleType
+  createdAt   DateTime    @default(now())
+
+  user        User        @relation("UserDistributions", fields: [userId], references: [id], onDelete: Cascade)
+  pump        Pump        @relation(fields: [pumpId], references: [id], onDelete: Cascade)
+  admin       User        @relation("AdminDistributions", fields: [adminId], references: [id], onDelete: Cascade)
+}
+
+model OtpCode {
+  id        String   @id @default(cuid())
+  userId    String
+  code      String
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}

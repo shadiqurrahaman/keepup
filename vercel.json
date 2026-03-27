@@ -1,0 +1,33 @@
+{
+  "buildCommand": "npx prisma generate && next build",
+  "installCommand": "npm ci",
+  "framework": "nextjs",
+  "regions": ["sin1"],
+  "env": {
+    "WEEKLY_FUEL_LIMIT_LITERS": "5"
+  },
+  "headers": [
+    {
+      "source": "/sw.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        },
+        {
+          "key": "Service-Worker-Allowed",
+          "value": "/"
+        }
+      ]
+    },
+    {
+      "source": "/manifest.json",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    }
+  ]
+}
