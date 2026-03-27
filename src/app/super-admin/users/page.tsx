@@ -36,6 +36,7 @@ export default function ManageUsersPage() {
       if (user.role !== 'SUPER_ADMIN') { router.push('/dashboard'); return }
       fetchUsers()
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, authLoading, page])
 
   const fetchUsers = async (phone?: string) => {

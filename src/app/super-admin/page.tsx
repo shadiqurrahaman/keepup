@@ -30,6 +30,7 @@ export default function SuperAdminDashboard() {
       if (user.role !== 'SUPER_ADMIN') { router.push('/dashboard'); return }
       fetchStats()
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, authLoading])
 
   const fetchStats = async () => {

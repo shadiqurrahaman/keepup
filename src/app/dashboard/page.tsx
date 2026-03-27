@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Image from 'next/image'
 import { useAuth } from '@/lib/auth-context'
 import { useI18n } from '@/lib/i18n'
 import { Navbar } from '@/components/navbar'
@@ -40,6 +41,7 @@ export default function DashboardPage() {
       fetchQuota()
       generateQR()
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, authLoading])
 
   const fetchQuota = async () => {
@@ -111,7 +113,7 @@ export default function DashboardPage() {
         <Card title={t('dashboard.myQrCode')} subtitle={t('dashboard.qrInstruction')}>
           <div className="flex justify-center">
             {qrUrl ? (
-              <img src={qrUrl} alt="QR Code" className="w-48 h-48 rounded-lg" />
+              <Image src={qrUrl} alt="QR Code" width={192} height={192} className="rounded-lg" />
             ) : (
               <Loading />
             )}

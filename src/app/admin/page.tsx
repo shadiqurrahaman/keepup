@@ -34,6 +34,7 @@ export default function AdminDashboard() {
       if (user.role !== 'PUMP_ADMIN' && user.role !== 'SUPER_ADMIN') { router.push('/dashboard'); return }
       fetchToday()
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, authLoading])
 
   const fetchToday = async () => {

@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
     const expiresAt = new Date(Date.now() + 5 * 60 * 1000)
 
     // Find or check if user exists (for registration flow, user might not exist yet)
-    let user = await prisma.user.findUnique({ where: { phone } })
+    const user = await prisma.user.findUnique({ where: { phone } })
 
     if (user) {
       await prisma.otpCode.create({

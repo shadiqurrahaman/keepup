@@ -39,6 +39,7 @@ export default function ManagePumpsPage() {
       if (user.role !== 'SUPER_ADMIN') { router.push('/dashboard'); return }
       fetchPumps()
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, authLoading])
 
   const fetchPumps = async () => {
