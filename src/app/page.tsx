@@ -73,9 +73,6 @@ export default function HomePage() {
             <Link href="/login" className="px-8 py-3 bg-blue-700 text-white rounded-xl font-semibold hover:bg-blue-600 transition-colors border border-blue-600">
               {t('auth.loginTitle')}
             </Link>
-            <Link href="/login" className="px-8 py-3 bg-blue-700 text-white rounded-xl font-semibold hover:bg-blue-600 transition-colors border border-blue-600">
-              {t('auth.loginTitle')}
-            </Link>
           </div>
         </div>
       </main>
