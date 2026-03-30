@@ -91,3 +91,12 @@ model OtpCode {
 
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
+
+model PendingOtp {
+  id        String   @id @default(cuid())
+  phone     String
+  code      String
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}

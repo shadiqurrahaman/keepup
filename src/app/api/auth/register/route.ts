@@ -7,15 +7,38 @@ import { cookies } from 'next/headers'
 
 export async function POST(req: NextRequest) {
   try {
-    const { phone, password, name, nid, licensePlate } = await req.json()
+    const { phone, password, name, nid, licensePlate, otpCode } = await req.json()
 
     if (!phone || !password || !name) {
       return errorResponse('Phone, password, and name are required')
     }
-
+    if (!otpCode) {
+      return errorResponse('OTP code is required')
+    }
     if (password.length < 6) {
       return errorResponse('Password must be at least 6 characters')
     }
+
+    // Verify OTP
+    const pending = await prisma.pendingOtp.findFirst({
+      where: {
+        phone,
+        code: otpCode,
+        used: false,
+        expiresAt: { gt: new Date() },
+      },
+      orderBy: { createdAt: 'desc' },
+    })
+
+    if (!pending) {
+      return errorResponse('Invalid or expired OTP code')
+    }
+
+    // Mark OTP as used
+    await prisma.pendingOtp.update({
+      where: { id: pending.id },
+      data: { used: true },
+    })
 
     const existing = await prisma.user.findUnique({ where: { phone } })
     if (existing) return errorResponse('Phone number already registered')
